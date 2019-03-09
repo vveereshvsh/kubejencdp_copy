@@ -83,8 +83,8 @@ stages{
     stage('Cleanup'){
         steps{
             sh '''
-            docker rmi $(docker images -f 'dangling=true' -q) || true
-            docker rmi $(docker images | sed 1,2d | awk '{print $3}') || true
+            sudo docker rmi $(docker images -f 'dangling=true' -q) || true
+            sudo docker rmi $(docker images | sed 1,2d | awk '{print $3}') || true
             '''
         }
 
@@ -104,8 +104,8 @@ stages{
             {
             sh '''
             echo $DOCKER_PASSWD | docker login --username ${DOCKER_USERNAME} --password-stdin ${DOCKER_REGISTRY_URL} 
-            docker push ${DOCKER_REGISTRY_URL}/${DOCKER_PROJECT_NAMESPACE}/${IMAGE_NAME}:${RELEASE_TAG}
-            docker logout
+            sudo docker push ${DOCKER_REGISTRY_URL}/${DOCKER_PROJECT_NAMESPACE}/${IMAGE_NAME}:${RELEASE_TAG}
+            sudo docker logout
             '''
             }
         }
