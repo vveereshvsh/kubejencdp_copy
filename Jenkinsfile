@@ -83,8 +83,8 @@ stages{
     stage('Cleanup'){
         steps{
             sh '''
-            sudo docker rmi $(docker images -f 'dangling=true' -q) || true
-            sudo docker rmi $(docker images | sed 1,2d | awk '{print $3}') || true
+             docker rmi $(docker images -f 'dangling=true' -q) || true
+             docker rmi $(docker images | sed 1,2d | awk '{print $3}') || true
             '''
         }
 
@@ -93,7 +93,7 @@ stages{
         steps{
             withEnv(["APP_NAME=${APP_NAME}", "PROJECT_NAME=${PROJECT_NAME}"]){
                 sh '''
-                sudo docker build -t ${DOCKER_REGISTRY_URL}/${DOCKER_PROJECT_NAMESPACE}/${IMAGE_NAME}:${RELEASE_TAG} --build-arg APP_NAME=${IMAGE_NAME}  -f app/Dockerfile app/.
+                 docker build -t ${DOCKER_REGISTRY_URL}/${DOCKER_PROJECT_NAMESPACE}/${IMAGE_NAME}:${RELEASE_TAG} --build-arg APP_NAME=${IMAGE_NAME}  -f app/Dockerfile app/.
                 '''
             }   
         }
@@ -104,8 +104,8 @@ stages{
             {
             sh '''
             echo $DOCKER_PASSWD | docker login --username ${DOCKER_USERNAME} --password-stdin ${DOCKER_REGISTRY_URL} 
-            sudo docker push ${DOCKER_REGISTRY_URL}/${DOCKER_PROJECT_NAMESPACE}/${IMAGE_NAME}:${RELEASE_TAG}
-            sudo docker logout
+             docker push ${DOCKER_REGISTRY_URL}/${DOCKER_PROJECT_NAMESPACE}/${IMAGE_NAME}:${RELEASE_TAG}
+             docker logout
             '''
             }
         }
